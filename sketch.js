@@ -1,6 +1,21 @@
 carScale = 0.5;
 var ccar;
 
+function testPoint(gridx, gridy){
+    let isGood = false;
+    if (gridLookup(gridx, gridy) == false) {
+        fill(0)
+        isGood = false;
+    } else {
+        fill(200,70,70)
+        isGood = true;
+    }
+    ellipse(gridx, gridy, 10, 10)
+    return isGood;
+
+
+}
+
 class Car {
     constructor(startx, starty, startDir) {
         this.rearAxle = createVector(startx, starty);
@@ -91,7 +106,7 @@ class Car {
 
     break() {
         if (abs(this.acceleration) >= 0) {
-            this.acceleration -= this.acceleration * 0.1;
+            this.acceleration -= this.acceleration * 0.08;
         }
         this.breaking = true;
     }
@@ -132,7 +147,9 @@ class Car {
             this.carS[1] - 0.35 * this.carS[1],
             (this.carS[0] - (2 * this.carS[0]) / 50) / 2
         );
-        // an angle based on the front 
+        // an angle based on the size of the car?
+
+        // console.log(frontTh)
 
         let rearD = (this.carS[0] - (2 * this.carS[0]) / 50) / 2;
 
@@ -157,16 +174,64 @@ class Car {
         }
 
 
-        // let frontCx = this.rearAxle.x + frontD * cos(frontTh + this.carTheta);
-        // let frontCy = this.rearAxle.y - frontD * sin(frontTh + this.carTheta);
+        let frontCx = this.rearAxle.x + frontD * cos(frontTh + this.carTheta);
+        let frontCy = this.rearAxle.y - frontD * sin(frontTh + this.carTheta);
+
+
+        let frontDir = 4.72;
+        let ahead1x = this.rearAxle.x + ((frontD * 1.2) * cos(this.carTheta - frontDir));
+        let ahdad1y = this.rearAxle.y - ((frontD * 1.2) * sin(this.carTheta - frontDir));
+
+        // if (gridLookup(ahead1x, ahdad1y) == false) {
+        //     fill(0)
+        // } else {
+        //     fill(200)
+        // }
+        // ellipse(ahead1x, ahdad1y, 10, 10)
+        testPoint(ahead1x, ahdad1y)
 
         let ahead1Rx = this.rearAxle.x + ((frontD * 2) * cos(frontTh + this.carTheta));
         let ahead1Ry = this.rearAxle.y - ((frontD * 2) * sin(frontTh + this.carTheta));
-        ellipse(ahead1Rx, ahead1Ry, 20, 20)
+        testPoint(ahead1Rx, ahead1Ry)
 
         let ahead1Lx = this.rearAxle.x - ((frontD * 2) * cos(frontTh - this.carTheta));
         let ahead1Ly = this.rearAxle.y - ((frontD * 2) * sin(frontTh - this.carTheta));
-        ellipse(ahead1Lx, ahead1Ly, 20, 20)
+        testPoint(ahead1Lx, ahead1Ly);
+
+        let sideLx = this.rearAxle.x - ((frontD * 1.3) * cos(this.carTheta-.4));
+        let sideLy = this.rearAxle.y + ((frontD * 1.3) * sin(this.carTheta-.4));
+        testPoint(sideLx, sideLy);
+
+        let sideRx = this.rearAxle.x + ((frontD * 1.3) * cos(this.carTheta+.4));
+        let sideRy = this.rearAxle.y - ((frontD * 1.3) * sin(this.carTheta+.4));
+        testPoint(sideRx, sideRy);
+
+
+        let ahead2Rx = this.rearAxle.x + ((frontD * 3) * cos(frontTh +this.carTheta- .15));
+        let ahdad2Ry = this.rearAxle.y - ((frontD * 3) * sin(frontTh+ this.carTheta- .15));
+        testPoint(ahead2Rx, ahdad2Ry);
+
+        let ahead2Lx = this.rearAxle.x - ((frontD * 3) * cos(frontTh -this.carTheta - .15));
+        let ahdad2Ly = this.rearAxle.y - ((frontD * 3) * sin(frontTh - this.carTheta- .15));
+        testPoint(ahead2Lx, ahdad2Ly);
+
+
+
+        let ahead2x = this.rearAxle.x + ((frontD * 3.2) * cos(this.carTheta - frontDir));
+        let ahdad2y = this.rearAxle.y - ((frontD * 3.2) * sin(this.carTheta - frontDir));
+        testPoint(ahead2x, ahdad2y);
+
+
+        let ahead3x = this.rearAxle.x + ((frontD * 4.5) * cos(this.carTheta - frontDir));
+        let ahdad3y = this.rearAxle.y - ((frontD * 4.5) * sin(this.carTheta - frontDir));
+        testPoint(ahead3x, ahdad3y);
+
+        let behindDir = 1.6;
+
+        let behind1x = this.rearAxle.x + ((frontD * 1.2) * cos(this.carTheta - behindDir));
+        let behind1y = this.rearAxle.y - ((frontD * 1.2) * sin(this.carTheta - behindDir));
+        testPoint(behind1x, behind1y);
+
 
         // Draw front tires
         fill(0);
@@ -222,7 +287,7 @@ class Car {
         frontBumper.add(this.rearAxle)
 
 
-        ellipse(frontBumper.x, frontBumper.y, 30, 30)
+        // ellipse(frontBumper.x, frontBumper.y, 30, 30)
         // frontBumper.setHeading(5);
         // print(frontBumper)
 
