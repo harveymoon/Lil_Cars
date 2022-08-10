@@ -1,4 +1,4 @@
-carScale = 0.5;
+carScale = 0.3;
 var ccar;
 
 var circleTrack;
@@ -9,8 +9,8 @@ var road_grid = [];
 var gridSize = 40;
 
 
-const SIM_WIDTH = 128;
-const SIM_HEIGHT = 256;
+const SIM_WIDTH = 1024;
+const SIM_HEIGHT = 1024;
 
 var debugBrain = false;
 
@@ -32,10 +32,27 @@ function testPoint(gridx, gridy){
 }
 
 
+// A dict of grids, each representing a grid of data.
+// Instantiated on setup().
+const grids = {};
+
 function setup() {
     createCanvas(1000, 1000);
-    ccar = new Car(200, 200, 0);
-    circleTrack =  new Road();
+  
+    if (debugBrain) {
+        frameRate(3);
+      }
+    
+      pixelDensity(1);
+      noSmooth();
+
+
+      ccar = new Car(200, 200, 0);
+      circleTrack =  new Road();
+
+
+      grids.road = new ValueGrid(SIM_WIDTH, SIM_HEIGHT, 0);
+  
 
     for (gx = 0; gx < width / gridSize; gx++) {
         for (gy = 0; gy < height / gridSize; gy++) {
@@ -120,6 +137,7 @@ function draw() {
     }
     ellipse(mouseX, mouseY, 20, 20)
 
+    circleTrack.findClosestTo(ccar.rearAxle.x,ccar.rearAxle.y);
 
 }
 

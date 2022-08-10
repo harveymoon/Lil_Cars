@@ -26,7 +26,7 @@ class Car {
         // Car speeds
         this.speed = 0;
         this.maxSpeed = 1000 * carScale; // Higher is faster
-        this.turnSpeed = 20 * carScale; // Lower is faster
+        this.turnSpeed = 100 * carScale; // Lower is faster
 
         // Initial turning radius set to maxR so wheels straight
         // turnRadius = maxR

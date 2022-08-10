@@ -15,9 +15,7 @@ class Road{
            let vecN = createVector(xPos, yPos);
            vecN.add(width/4,height/4)
            this.Checkpoints.push(vecN);
-            
         }
-        
     }
 
     drawRoad(){
@@ -37,6 +35,47 @@ class Road{
 
         }
         image( this.roadImg,0,0, width, height)
+    }
+
+    findClosestTo(inx,iny){
+      let closestFound = createVector(10000,10000,10000);
+      let targetPos = createVector(inx/2, iny/2)
+
+
+      // ellipse(targetPos.x,targetPos.y,20,20);
+
+      for (let index = 0; index < this.Checkpoints.length; index++) { // loop all checkpoints on the track. 
+        let vecPos = this.Checkpoints[index];
+        // vecPos.mult(2);
+        let pindex = (index-1);
+        if(pindex<0){
+            pindex = this.Checkpoints.length-1
+        }
+        let pvecPos = this.Checkpoints[pindex];
+        // pvecPos.mult(2);
+
+        let distD = p5.Vector.dist(vecPos, pvecPos); // find the distance between two vector points. 
+        
+        for(let v = 0; v < distD; v+=1){ //interpolate between these two points. 
+          let checkPoint = p5.Vector.lerp(vecPos, pvecPos, v/distD); // a point between two checkpoints. 
+         
+          // ellipse(checkPoint.x, checkPoint.y, 10,10);
+         
+          let checkDist = p5.Vector.dist(targetPos, checkPoint); // the distance between input and current look position
+          if(checkDist<closestFound.z){
+            closestFound.set(checkPoint.x, checkPoint.y, checkDist);
+          }
+        }
+
+      }
+
+      closestFound.mult(2);
+      ellipse(closestFound.x, closestFound.y, 50,50);
+
+
+
+      return closestFound;
+
     }
 
 }
