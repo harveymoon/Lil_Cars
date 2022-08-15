@@ -40,7 +40,14 @@ class Car {
         let tcorY = this.corY - this.carS[1];
 
         this.diffTheta = 0;
+
+        this.forwardTarget = createVector(-1,-1); // a vector we will use as a target for the car, a position on the road in front of the car
+        this.angleToTarget = 0;// an angle we can calculate from the car to the forward target. 
+    
+    
     }
+
+
 
     accelerate(ammt) {
         if (this.acceleration != 1) {
@@ -214,6 +221,7 @@ class Car {
         let behind1y = this.rearAxle.y - ((frontD * 1.2) * sin(this.carTheta - behindDir));
         testPoint(behind1x, behind1y);
 
+        
 
         // Draw front tires
         fill(0);
