@@ -9,44 +9,47 @@ class Road extends Grid {
     super(GridWidth, GridHHeight);
     this.fill(defaultRoadType);
     
-    let numPoints = 10;
-    let angEach = TWO_PI/numPoints;
+    this.numPoints = 10;
+    let angEach = TWO_PI/this.numPoints;
     
     this.Checkpoints = [];
     
     this.roadImg = createGraphics(GridWidth, GridHHeight);
     
-    for (let index = 0; index < numPoints; index++) {
-      let radius = random(100,GridWidth*.4);
-      let xPos = sin(angEach*index)*radius;
+    for (let index = 0; index < this.numPoints; index++) {
+      let radius = random(200,GridWidth*.5);
+      let xPos = sin((angEach)*index)*radius;
       let yPos = cos(angEach*index)*radius;
       let vecN = createVector(xPos, yPos);
       vecN.add(GridWidth/2,GridHHeight/2)
       this.Checkpoints.push(vecN);
     }
     
-    
-    function generateRoadGrid(width, height) {
+    this.startingLine = this.Checkpoints[0];
+
+    let headingVec = createVector(this.Checkpoints[1].x -this.Checkpoints[0].x, this.Checkpoints[1].y-this.Checkpoints[0].y);
+
+
+    this.startDir = headingVec.heading() 
+    console.log(this.startDir)
+  
+  }
+
+  generateRoadGrid(width, height) {
       
-      for (let x = 0; x < GridWidth; x++){
-        for (let x = 0; x < GridHHeight; x++){
-          
-          
-          let c = get(50, 90);
-          if(c[0] > 100){
-            this.set(x, y, RoadType.Gravel);
-          }else{
-            this.set(x, y, RoadType.Road);
-          }
-          
-          
+    for (let x = 0; x < GridWidth; x++){
+      for (let y = 0; y < GridHHeight; y++){
+        let c = this.roadImg.get(x, y);
+        if(c[0] > 100){
+          this.set(x, y, RoadType.Gravel);
+        }else{
+          this.set(x, y, RoadType.Road);
         }
       }
-      
     }
     
-    
   }
+  
   
   drawRoad(){
     for (let index = 0; index < this.Checkpoints.length; index++) {
@@ -85,12 +88,16 @@ class Road extends Grid {
       
       let distD = p5.Vector.dist(vecPos, pvecPos); // find the distance between two vector points. 
       
+      
+
       for(let v = 0; v < distD; v+=1){ //interpolate between these two points. 
         let checkPoint = p5.Vector.lerp(vecPos, pvecPos, v/distD); // a point between two checkpoints. 
         
         // ellipse(checkPoint.x, checkPoint.y, 10,10);
         
         let checkDist = p5.Vector.dist(targetPos, checkPoint); // the distance between input and current look position
+        // checkDist += (index + (v/distD))
+       
         if(checkDist<closestFound.z){
           idx = (index + (1-(v/distD)))/this.Checkpoints.length
           closestFound.set(checkPoint.x, checkPoint.y, checkDist);
@@ -105,6 +112,16 @@ class Road extends Grid {
     return [closestFound, idx];
     
   }
+
+  checkOnRoad(inx, iny){
+    let foundF = this.findClosestTo(inx, iny);
+            if(foundF[0].z < 20){
+               return false;
+            }else{
+               return true;
+            }
+
+  }
   
   findPointAtFraction(inPercent){
     
@@ -114,7 +131,7 @@ class Road extends Grid {
     let roadSpot = 1-(roadidx%1);
     roadidx = int(roadidx)
     
-    console.log()
+    // console.log()
     
     let vecPos = this.Checkpoints[roadidx];
     // vecPos.mult(2);
@@ -138,8 +155,8 @@ class Road extends Grid {
     // console.log(pvecPos)
     
     fill(200,0,0);
-    ellipse(vecPos.x, vecPos.y, 20,20);
-    ellipse(pvecPos.x, pvecPos.y, 20, 20);
+    // ellipse(vecPos.x, vecPos.y, 20,20);
+    // ellipse(pvecPos.x, pvecPos.y, 20, 20);
     // pvecPos.mult(2);
     
     // let distD = p5.Vector.dist(vecPos, pvecPos); // find the distance between two vector points. 
