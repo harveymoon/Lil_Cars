@@ -8,7 +8,7 @@ var carArray = [];
 var numberOfCars = 10;
 var gasFillup = 900;
 
-var WinnningCars = [];
+var WinningCars = [];
 var topWinners = 50;
 
 var circleTrack;
@@ -180,8 +180,8 @@ function setup() {
     winnerDiv.style('font-family', 'monospace');
 
     var winnerListString = '';
-    for (var i = 0; i < WinnningCars; i++) {
-        winnerListString += i + ' : ' + WinnningCars[i].score + '<br>';
+    for (var i = 0; i < WinningCars; i++) {
+        winnerListString += i + ' : ' + WinningCars[i].score + '<br>';
     }
 
     winnerDiv.html(winnerListString);
@@ -339,7 +339,7 @@ function setup() {
 
 // a fuction to save the current winning cars to a file.
 function saveWinners() {
-    let data = JSON.stringify(WinnningCars);
+    let data = JSON.stringify(WinningCars);
     let filename = 'winners.json';
     saveJSON(data, filename);
 }
@@ -365,14 +365,14 @@ function repopulate() {
     circleTrack = new Road(SIM_WIDTH, SIM_HEIGHT, RoadType.Gravel);
 
     let cnt = 0
-    while (carArray.length < WinnningCars.length) {
-        let GSEQ = WinnningCars[cnt]['GSEQ'];
+    while (carArray.length < WinningCars.length) {
+        let GSEQ = WinningCars[cnt]['GSEQ'];
         cnt += 1;
         let carN = new Car(circleTrack.startingLine.x, circleTrack.startingLine.y, circleTrack.startDir, GSEQ);
         carArray.push(carN)
     }
 
-    WinnningCars = [];
+    WinningCars = [];
 
 
 
@@ -471,8 +471,8 @@ function draw() {
     }
 
     var winnerListString = '';
-    for (var i = 0; i < WinnningCars; i++) {
-        winnerListString += i + ' : ' + WinnningCars[i].score + '<br>';
+    for (var i = 0; i < WinningCars; i++) {
+        winnerListString += i + ' : ' + WinningCars[i].score + '<br>';
     }
 
     winnerDiv.html(winnerListString);
@@ -649,8 +649,8 @@ function draw() {
                 }
 
 
-                if (WinnningCars.length > 0 && random() > .1) {
-                    GSEQ = WinnningCars[int(random(WinnningCars.length))]["GSEQ"];
+                if (WinningCars.length > 0 && random() > .1) {
+                    GSEQ = WinningCars[int(random(WinningCars.length))]["GSEQ"];
                     if (random() > .1) {
                         GSEQ = mutateGeneSequence(GSEQ)
                     }
@@ -673,33 +673,33 @@ function draw() {
 
 function addWinner(GSEQin, distanceRecord) {
 
-    for (let index = 0; index < WinnningCars.length; index++) {
-        const carPick = WinnningCars[index];
+    for (let index = 0; index < WinningCars.length; index++) {
+        const carPick = WinningCars[index];
         if (carPick["GSEQ"] == GSEQin) {
-            if (WinnningCars[index]["dist"] < distanceRecord) {
-                WinnningCars[index]["dist"] = distanceRecord;
+            if (WinningCars[index]["dist"] < distanceRecord) {
+                WinningCars[index]["dist"] = distanceRecord;
             }
 
             return
         }
     }
 
-    WinnningCars.push({ "GSEQ": GSEQin, "dist": distanceRecord });
+    WinningCars.push({ "GSEQ": GSEQin, "dist": distanceRecord });
 }
 
 function sortWinners() {
 
-    WinnningCars.sort((a, b) => {
+    WinningCars.sort((a, b) => {
         return b.dist - a.dist;
     });
 
-    while (WinnningCars.length > topWinners) {
-        WinnningCars.pop();
+    while (WinningCars.length > topWinners) {
+        WinningCars.pop();
     }
     fill(0);
-    // console.log(WinnningCars.length)
-    // for (let index = 0; index < WinnningCars.length; index++) {
-    //     const carPick = WinnningCars[index];
+    // console.log(WinningCars.length)
+    // for (let index = 0; index < WinningCars.length; index++) {
+    //     const carPick = WinningCars[index];
     //     // console.log(index, carPick)
     //     if (!darkMode) {
     //         if (carPick["dist"] <= .7) {
@@ -713,10 +713,10 @@ function sortWinners() {
 
     let scoreSteps = 10000;
 
-    if (WinnningCars.length > 2) {
+    if (WinningCars.length > 2) {
         scoreCount++;
-        // console.log(WinnningCars[0])
-        fitnessRange = [WinnningCars[0]["dist"], WinnningCars[min(WinnningCars.length - 1, topWinners - 1)]["dist"]]
+        // console.log(WinningCars[0])
+        fitnessRange = [WinningCars[0]["dist"], WinningCars[min(WinningCars.length - 1, topWinners - 1)]["dist"]]
         if (scoreCount >= scoreSteps) {
             scoreBoard.background(0);
             scoreCount = 0;
@@ -733,8 +733,8 @@ function sortWinners() {
     }
 
     var winnerListString = '';
-    for (var i = 0; i < WinnningCars; i++) {
-        winnerListString += i + ' : ' + WinnningCars[i].score + '<br>';
+    for (var i = 0; i < WinningCars; i++) {
+        winnerListString += i + ' : ' + WinningCars[i].score + '<br>';
     }
 
     winnerDiv.html(winnerListString);
