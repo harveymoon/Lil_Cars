@@ -572,17 +572,16 @@ class Agent {
         if (nextX > FieldSize[0] / 2 || nextX < FieldSize[0] / -2) {
             mx = 0;
         }
-        if (nextY + my > FieldSize[1] / 2 || nextY + my < FieldSize[1] / -2) {
+        if (nextY > FieldSize[1] / 2 || nextY < FieldSize[1] / -2) {
             my = 0;
         }
-        if (nextZ + mz > FieldSize[2] / 2 || nextZ + mz < FieldSize[2] / -2) {
+        if (nextZ > FieldSize[2] / 2 || nextZ < FieldSize[2] / -2) {
             mz = 0;
         }
 
 
-        // block-based collision was removed. Inside block logic would go here if
-        // a Blocks grid was defined.
-        let insideBlock = false;
+        // block-based collision was removed. Add grid checks here if a Blocks
+        // array is later introduced.
 
         // push()
         // translate(-FieldSize[0] / 2, -FieldSize[1] / 2, -FieldSize[2] / 2);
@@ -622,12 +621,6 @@ class Agent {
         //         }
         //     }
         // }
-
-        if (insideBlock) {
-            mx = 0;
-            my = 0;
-            mz = 0;
-        }
 
 
 
