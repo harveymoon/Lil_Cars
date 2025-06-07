@@ -1688,7 +1688,7 @@ const RoadType = {
 		this.off = 15 * carScale;
 		// Max and min turning radii
 		this.maxR = 2000 * carScale; // Max turning radius // can be too high and ineffective. 
-		// this basically deturmines how "sporty" the steering is on more straight angles
+                // this basically determines how "sporty" the steering is on more straight angles
 		this.minR = this.carS[1] * 1.2; // Min turning radius is a little more then one car length
 		// Car speeds
 		this.speed = 0;
