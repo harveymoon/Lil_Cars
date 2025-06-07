@@ -51,6 +51,10 @@ var scoreBoard;
 scoreBoardVisible = false;
 var scoreCount = 0;
 
+// Colors used to visualize various parameters
+var colorLow;
+var colorHigh;
+
 
 const SIM_WIDTH = 1024;
 const SIM_HEIGHT = 1024;
@@ -170,6 +174,8 @@ function setup() {
     dnaPick = int(15, random(athTeam.length))
     // FieldID = makeRandomID();
     createCanvas(windowWidth , windowHeight);
+    colorLow = color(218, 100, 100);
+    colorHigh = color(30, 200, 120);
     circleTrack = new Road(SIM_WIDTH, SIM_HEIGHT, RoadType.Gravel);
 
     document.oncontextmenu = function () { return false; }
