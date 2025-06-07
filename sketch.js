@@ -529,8 +529,8 @@ function saveTopAgent() {
 class Agent {
     constructor(dnaIn) {
         // constructor contains the agents properties including position, fitness, and dna
-        this.pos = createVector(random(-10, 10), FieldSize[1] / -2, 0);
-        this.IntPos = createVector(0, 0, 0);
+        this.pos = createVector(random(-10, 10), FieldSize[1] / -2);
+        this.IntPos = createVector(0, 0);
         this.fitness = 0;
         this.dna = dnaIn;
         this.InternalNeurons = [0, 0, 0];
@@ -559,97 +559,29 @@ class Agent {
         }
     }
 
-    moveAgent(mx, my, mz) {
+    moveAgent(mx, my) {
         // check to see if the desired relative movement will put the agent outside of the field or inside of a Block
         // if it will, do not move the agent
         // otherwise update the agents position
 
         let nextX = this.pos.x + mx;
         let nextY = this.pos.y + my;
-        let nextZ = this.pos.z + mz;
-
-
         if (nextX > FieldSize[0] / 2 || nextX < FieldSize[0] / -2) {
             mx = 0;
         }
-        if (nextY + my > FieldSize[1] / 2 || nextY + my < FieldSize[1] / -2) {
+        if (nextY > FieldSize[1] / 2 || nextY < FieldSize[1] / -2) {
             my = 0;
-        }
-        if (nextZ + mz > FieldSize[2] / 2 || nextZ + mz < FieldSize[2] / -2) {
-            mz = 0;
         }
 
 
         // check to see if the agent is inside of a block
-        let insideBlock = false;
 
-        let blockNLoc = PosToBlock(createVector(nextX, nextY, nextZ));
-
-        let blockX = blockNLoc[0];
-        let blockY = blockNLoc[1];
-        let blockZ = blockNLoc[2];
-
-
-        // check if the block postion is inside the field
-        if (blockX >= 0 && blockX < Blocks.length && blockY >= 0 && blockY < Blocks[0].length && blockZ >= 0 && blockZ < Blocks[0][0].length) {
-            /// check the block at position blockX blockY blockZ see if the value is greater then 1
-            if (Blocks[blockX] != undefined && Blocks[blockX][blockY] != undefined && Blocks[blockX][blockY][blockZ] != undefined) {
-                insideBlock = Blocks[blockX][blockY][blockZ] > 0;
-            }
-
-        }
-
-        // push()
-        // translate(-FieldSize[0] / 2, -FieldSize[1] / 2, -FieldSize[2] / 2);
-        // translate(blockSize / 2, blockSize / 2, blockSize / 2); // offset by half a block (so the blocks are centered on the blo
-        // translate(blockX * blockSize, blockY * blockSize, blockZ * blockSize);
-        // noFill();
-        // stroke(0, 200, 120, 40);
-        // box(blockSize);
-        // pop()
-
-
-
-        // bSpot1: // block spot 1
-        /// look at all of the blocks around the agent
-        // for (let i = blockX - 1; i <= blockX + 1; i++) {
-        //     for (let j = blockY - 1; j <= blockY + 1; j++) {
-        //         for (let k = blockZ - 1; k <= blockZ + 1; k++) {
-        //             // if the block is not empty, check to see if the agent is inside of it
-        //             if (i >= 0 && j >= 0 && k >= 0 && i < Blocks.length && j < Blocks[0].length && k < Blocks[0][0].length) {
-        //                 if (Blocks[i][j][k] != 0) {
-        //                     // if the agent is inside of the block, set insideBlock to true
-        //                     let bminX = i * blockSize;
-        //                     let bmaxX = (i + 1) * blockSize;
-        //                     let bminY = j * blockSize;
-        //                     let bmaxY = (j + 1) * blockSize;
-        //                     let bminZ = k * blockSize;
-        //                     let bmaxZ = (k + 1) * blockSize;
-
-        //                     if (nextX >= bminX && nextX <= bmaxX && nextY >= bminY && nextY <= bmaxY && nextZ >= bminZ && nextZ <= bmaxZ) {
-        //                         insideBlock = true;
-        //                         console.log("inside block");
-        //                         break bSpot1;
-        //                     }
-        //                 }
-        //             }
-
-        //         }
-        //     }
-        // }
-
-        if (insideBlock) {
-            mx = 0;
-            my = 0;
-            mz = 0;
-        }
 
 
 
         // update the agents position
         this.pos.x += mx;
         this.pos.y += my;
-        this.pos.z += mz;
 
         // if (insideBlock) {
         //     // draw a sphere  here to show the agents position
@@ -672,7 +604,7 @@ class Agent {
 
         // if agent is inside of food spot, add to fitness and remove one from food spot ammt
         for (let i = 0; i < FoodSpots.length; i++) {
-            let d = dist(this.pos.x, this.pos.y, this.pos.z, FoodSpots[i].pos.x, FoodSpots[i].pos.y, FoodSpots[i].pos.z);
+            let d = dist(this.pos.x, this.pos.y, FoodSpots[i].pos.x, FoodSpots[i].pos.y);
             if (d < FoodSpots[i].radius) {
 
                 insideFood = true;
@@ -706,10 +638,10 @@ class Agent {
 
         if (insideFood) {
             push()
-            translate(this.pos.x, this.pos.y, this.pos.z);
+            translate(this.pos.x, this.pos.y);
             noStroke();
             fill(this.colorR, this.colorG, this.colorB);
-            sphere(2.5, 4, 4);
+            ellipse(0, 0, 5, 5);
             pop()
         }
         // run brains
@@ -737,24 +669,16 @@ class Agent {
             this.pos.y = -FieldSize[1] / 2;
             this.age += 1;
         }
-        if (this.pos.z > FieldSize[2] / 2) {
-            this.pos.z = FieldSize[2] / 2;
-            this.age += 1;
-        }
-        if (this.pos.z < -FieldSize[2] / 2) {
-            this.pos.z = -FieldSize[2] / 2;
-            this.age += 1;
-        }
 
 
 
         if (this.Ppos.length > 0) {
-            let distFromLast = dist(this.pos.x, this.pos.y, this.pos.z, this.Ppos[this.Ppos.length - 1].x, this.Ppos[this.Ppos.length - 1].y, this.Ppos[this.Ppos.length - 1].z);
+            let distFromLast = dist(this.pos.x, this.pos.y, this.Ppos[this.Ppos.length - 1].x, this.Ppos[this.Ppos.length - 1].y);
             this.totalMovement += distFromLast;
             this.energy -= distFromLast / 1000;
         }
         // add a copy of the current position to the previous positions array
-        this.Ppos.push(createVector(this.pos.x, this.pos.y, this.pos.z));
+        this.Ppos.push(createVector(this.pos.x, this.pos.y));
 
         // if there are more than 100 previous positions, remove the oldest one
         // if (this.Ppos.length > tailLength) {
@@ -763,7 +687,6 @@ class Agent {
 
         this.IntPos.x = round(this.pos.x);
         this.IntPos.y = round(this.pos.y);
-        this.IntPos.z = round(this.pos.z);
 
 
 
@@ -781,14 +704,14 @@ class Agent {
 
         stroke(this.colorR, this.colorG, this.colorB);
         strokeWeight(10);
-        point(this.pos.x, this.pos.y, this.pos.z);
+        point(this.pos.x, this.pos.y);
         strokeWeight(.5)
 
         // push();
-        // translate(this.IntPos.x, this.IntPos.y, this.IntPos.z);
+        // translate(this.IntPos.x, this.IntPos.y);
         // noStroke();
         // fill(this.colorR, this.colorG, this.colorB);
-        // box(1);
+        // rect(0, 0, 1, 1);
         // pop();
 
 
