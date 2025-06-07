@@ -50,6 +50,9 @@ var AgentsList = [];
 var scoreBoard;
 scoreBoardVisible = false;
 var scoreCount = 0;
+var scoreboardDiv; // DOM element for on-screen stats
+
+const RUN_DURATION = 60 * 60; // frames to run before saving a report
 
 // Colors used to visualize various parameters
 var colorLow;
@@ -177,6 +180,13 @@ function setup() {
     colorLow = color(218, 100, 100);
     colorHigh = color(30, 200, 120);
     circleTrack = new Road(SIM_WIDTH, SIM_HEIGHT, RoadType.Gravel);
+
+    scoreboardDiv = createDiv('');
+    scoreboardDiv.position(10, 10);
+    scoreboardDiv.style('background', 'rgba(0,0,0,0.5)');
+    scoreboardDiv.style('color', '#fff');
+    scoreboardDiv.style('padding', '5px');
+    scoreboardDiv.style('font-family', 'monospace');
 
     document.oncontextmenu = function () { return false; }
 
@@ -451,6 +461,28 @@ function draw() {
         TopAgents.splice(numberOfTopAgents, TopAgents.length - numberOfTopAgents);
     }
 
+    // update live scoreboard
+    let bestDist = 0;
+    let totalDist = 0;
+    for (let c of carArray) {
+        if (c.FarthestDistance > bestDist) bestDist = c.FarthestDistance;
+        totalDist += c.FarthestDistance;
+    }
+    let avgDist = carArray.length > 0 ? totalDist / carArray.length : 0;
+    if (scoreboardDiv) {
+        scoreboardDiv.html(
+            'Frame: ' + frameCount +
+            '<br>Cars: ' + carArray.length +
+            '<br>Best dist: ' + bestDist.toFixed(2) +
+            '<br>Avg dist: ' + avgDist.toFixed(2)
+        );
+    }
+
+    if (frameCount >= RUN_DURATION) {
+        saveRunReport(bestDist, avgDist);
+        noLoop();
+    }
+
     // // add agents to the ul list "AgentList"
     // let list = document.getElementById("AgentList");
     // list.innerHTML = "";
@@ -514,6 +546,17 @@ function sortWinners() {
     // }
 
     // winnerDiv.html(winnerListString);
+}
+
+function saveRunReport(bestDist, avgDist) {
+    const bestCar = carArray.reduce((a, b) => a.FarthestDistance > b.FarthestDistance ? a : b, carArray[0]);
+    const report = {
+        durationFrames: RUN_DURATION,
+        bestDistance: bestDist,
+        averageDistance: avgDist,
+        bestGenome: bestCar ? bestCar.GSequence : null
+    };
+    saveJSON(report, 'run_report.json');
 }
 
 function saveTopAgent() {
