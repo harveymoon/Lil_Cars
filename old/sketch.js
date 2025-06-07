@@ -532,7 +532,7 @@ function draw() {
         }
 
         if (keyIsDown(SHIFT)) {
-            ccar.break();
+            ccar.brake();
         }
 
         // ccar.runBrain();

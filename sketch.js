@@ -1364,7 +1364,7 @@ class ABrain {
 
         if (trigger > 0.5) {
             if (debugBrain) console.log(" Break  :  ")
-            agentObj.break();
+            agentObj.brake();
         }
 
         if (agentObj.Selected) {
@@ -1693,12 +1693,12 @@ const RoadType = {
 			}
 		}
 		
-		break() {
-			if (abs(this.acceleration) >= 0) {
-				this.acceleration -= this.acceleration * 0.08;
-			}
-			this.breaking = true;
-		}
+                brake() {
+                        if (abs(this.acceleration) >= 0) {
+                                this.acceleration -= this.acceleration * 0.08;
+                        }
+                        this.breaking = true;
+                }
 		
 		runBrain() {
 			if (this.Selected) {

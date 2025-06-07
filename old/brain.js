@@ -627,7 +627,7 @@ class ABrain {
 
         if (trigger > 0.5) {
             if (debugBrain) console.log(" Break  :  ")
-            agentObj.break();
+            agentObj.brake();
         }
 
         if (agentObj.Selected) {
