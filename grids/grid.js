@@ -35,7 +35,7 @@ class Grid {
     // index in cells to x y coordinate.
     indexToXY(index) {
       const x = index % this.width;
-      const y = index / this.width;
+      const y = Math.floor(index / this.width);
       return [x, y]
     }
   
