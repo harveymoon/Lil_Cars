@@ -1389,8 +1389,8 @@ const RoadType = {
   };
   
   class Road {
-    constructor(GridWidth, GridHHeight, defaultRoadType=RoadType.None){  
-    //   super(GridWidth, GridHHeight);
+    constructor(gridWidth, gridHeight, defaultRoadType=RoadType.None){
+    //   super(gridWidth, gridHeight);
     //   this.fill(defaultRoadType);
       
       this.numPoints = 10;
@@ -1398,14 +1398,14 @@ const RoadType = {
       
       this.Checkpoints = [];
       
-      this.roadImg = createGraphics(GridWidth, GridHHeight);
+      this.roadImg = createGraphics(gridWidth, gridHeight);
       
       for (let index = 0; index < this.numPoints; index++) {
-        let radius = random(200,GridWidth*.5);
+        let radius = random(200, gridWidth*.5);
         let xPos = sin((angEach)*index)*radius;
         let yPos = cos(angEach*index)*radius;
         let vecN = createVector(xPos, yPos);
-        vecN.add(GridWidth/2,GridHHeight/2)
+        vecN.add(gridWidth/2, gridHeight/2)
         this.Checkpoints.push(vecN);
       }
       
@@ -1420,9 +1420,9 @@ const RoadType = {
     }
   
     generateRoadGrid(width, height) {
-        
-      for (let x = 0; x < GridWidth; x++){
-        for (let y = 0; y < GridHHeight; y++){
+
+      for (let x = 0; x < width; x++){
+        for (let y = 0; y < height; y++){
           let c = this.roadImg.get(x, y);
           if(c[0] > 100){
             this.set(x, y, RoadType.Gravel);
