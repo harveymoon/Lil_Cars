@@ -165,7 +165,7 @@ class Car {
 
     }
 
-    break() {
+    brake() {
         if (abs(this.acceleration) >= 0) {
             this.acceleration -= this.acceleration * 0.08;
         }
