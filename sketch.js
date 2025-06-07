@@ -580,24 +580,9 @@ class Agent {
         }
 
 
-        // check to see if the agent is inside of a block
+        // block-based collision was removed. Inside block logic would go here if
+        // a Blocks grid was defined.
         let insideBlock = false;
-
-        let blockNLoc = PosToBlock(createVector(nextX, nextY, nextZ));
-
-        let blockX = blockNLoc[0];
-        let blockY = blockNLoc[1];
-        let blockZ = blockNLoc[2];
-
-
-        // check if the block postion is inside the field
-        if (blockX >= 0 && blockX < Blocks.length && blockY >= 0 && blockY < Blocks[0].length && blockZ >= 0 && blockZ < Blocks[0][0].length) {
-            /// check the block at position blockX blockY blockZ see if the value is greater then 1
-            if (Blocks[blockX] != undefined && Blocks[blockX][blockY] != undefined && Blocks[blockX][blockY][blockZ] != undefined) {
-                insideBlock = Blocks[blockX][blockY][blockZ] > 0;
-            }
-
-        }
 
         // push()
         // translate(-FieldSize[0] / 2, -FieldSize[1] / 2, -FieldSize[2] / 2);
